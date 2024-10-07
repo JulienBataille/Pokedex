@@ -3,6 +3,7 @@ import { Card } from "../Card";
 import { ThemedText } from "../ThemedText";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Link } from "expo-router";
+import { getPokemonArtwork } from "@/functions/pokemon";
 
 type Props = {
   style?: ViewStyle;
@@ -14,7 +15,10 @@ export function PokemonCard({ style, id, name }: Props) {
   const colors = useThemeColors();
   return (
     <Link href={{ pathname: "/pokemon/[id]", params: { id: id } }} asChild>
-      <Pressable android_ripple={{color: colors.tint, foreground: true}} style={style}>
+      <Pressable
+        android_ripple={{ color: colors.tint, foreground: true }}
+        style={style}
+      >
         <Card style={[styles.card]}>
           <View
             style={[styles.shadow, { backgroundColor: colors.grayBackground }]}
@@ -23,13 +27,14 @@ export function PokemonCard({ style, id, name }: Props) {
             # {id.toString().padStart(3, "0")}
           </ThemedText>
           <Image
+            style={styles.pokemon}
             source={{
-              uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
+              uri: getPokemonArtwork(id),
             }}
-            width={72}
-            height={72}
           />
-          <ThemedText>{name}</ThemedText>
+          <ThemedText style={{ textTransform: "capitalize" }}>
+            {name}
+          </ThemedText>
         </Card>
       </Pressable>
     </Link>
@@ -52,5 +57,9 @@ const styles = StyleSheet.create({
     right: 0,
     height: 44,
     borderRadius: 7,
+  },
+  pokemon: {
+    width: 72,
+    height: 72,
   },
 });

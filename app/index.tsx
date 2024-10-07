@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { PokemonCard } from "@/components/pokemon/PokemonCard";
 import { Row } from "@/components/Row";
 import { getPokemonId } from "@/functions/pokemon";
-import { useFetchQuery, useInfiniteFetchQuery } from "@/hooks/useFetchQuery";
+import { useInfiniteFetchQuery } from "@/hooks/useFetchQuery";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useState } from "react";
 import {
@@ -12,11 +12,10 @@ import {
   FlatList,
   Image,
   StyleSheet,
-  Text,
-  View,
+
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { SortButton } from "@/components/sortButton";
+import { RootView } from "@/components/RootView";
 
 export default function Index() {
   const colors = useThemeColors();
@@ -36,7 +35,7 @@ export default function Index() {
   ].sort((a, b) => (a[sortKey] < b[sortKey] ? -1 : 1));
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.tint }]}>
+    <RootView>
       <Row style={styles.header} gap={16}>
         <Image
           source={require("@/assets/images/pokeball.png")}
@@ -46,7 +45,7 @@ export default function Index() {
           Pokedex
         </ThemedText>
       </Row>
-      <Row gap={16}>
+      <Row gap={16} style={styles.form}>
         <SearchBar value={search} onChange={setSearch} />
         <SortButton value={sortKey} onChange={setSortKey}/>
       </Row>
@@ -70,18 +69,15 @@ export default function Index() {
           keyExtractor={(item) => item.id.toString()}
         />
       </Card>
-    </SafeAreaView>
+    </RootView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 4,
-  },
+
   header: {
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingBottom: 8,
   },
   body: {
     flex: 1,
@@ -97,4 +93,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  form:{
+    paddingHorizontal:12
+  }
 });
