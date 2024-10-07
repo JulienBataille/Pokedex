@@ -4,34 +4,34 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 const endpoint = "https://pokeapi.co/api/v2";
 
 type API = {
-  "/pokemon?limit=21": {
-    count: number;
-    next: string | null;
-    results: { name: string; url: string }[];
-  };
-  "/pokemon/[id]": {
-    id: number;
-    name: string;
-    url: string;
-    weight: number;
-    height: number;
-    moves: { move: { name: string } }[];
+  '/pokemon?limit=21': {
+    count: number
+    next: string | null
+    results: { name: string, url: string }[]
+  },
+  '/pokemon/[id]': {
+    id: number,
+    name: string,
+    url: string,
+    weight: number,
+    height: number,
+    moves: { move: { name: string } }[],
     stats: {
-      base_stat: number;
+      base_stat: number,
       stat: {
-        name: string;
-      };
-    }[];
+        name: string,
+      },
+    }[],
     cries: {
-      latest: string;
-    };
+      latest: string,
+    },
     types: {
       type: {
-        name: keyof(typeof Colors["type"]);
-      };
-    }[];
-  };
-  "/pokemon-species/[id]": {
+        name: keyof(typeof Colors["type"]),
+      },
+    }[],
+  },
+  '/pokemon-species/[id]': {
     flavor_text_entries: {
       flavor_text:string,
       language: {
@@ -49,7 +49,7 @@ export function useFetchQuery<T extends keyof API>(
     endpoint +
     Object.entries(params ?? {}).reduce(
       (acc, [key, value]) => acc.replaceAll(`[${key}]`, value),
-      path,
+      path
     );
   return useQuery({
     queryKey: [localUrl],
@@ -58,7 +58,7 @@ export function useFetchQuery<T extends keyof API>(
         headers: {
           Accept: "application/json",
         },
-      }).then((r) => r.json() as Promise<API[T]>);
+      }).then(r => r.json() as Promise<API[T]>);
     },
   });
 }
@@ -72,7 +72,7 @@ export function useInfiniteFetchQuery<T extends keyof API>(path: T) {
         headers: {
           Accept: "application/json",
         },
-      }).then((r) => r.json() as Promise<API[T]>);
+      }).then(r => r.json() as Promise<API[T]>);
     },
     getNextPageParam: (lastPage) => {
       if ("next" in lastPage) {
@@ -83,6 +83,4 @@ export function useInfiniteFetchQuery<T extends keyof API>(path: T) {
   });
 }
 
-function wait(duration: number) {
-  return new Promise((resolve) => setTimeout(resolve, duration * 1000));
-}
+
